@@ -2,32 +2,39 @@
 <div class="row justify-content-center mt-5">
   <div class="col-md-6 col-lg-5">
     <div class="card border-primary">
-      <div class="card-header text-center">
-        <h3>Registrar Nova Conta</h3>
-      </div>
+      <div class="card-header text-center"><h3>Registrar Nova Conta</h3></div>
       <div class="card-body">
         <form method="POST" action="" novalidate>
+          {{ form.hidden_tag() }}
           <div class="mb-3">
-            <label for="username" class="form-label">Nome de Usuário</label>
-            <input
-              type="text"
-              name="username"
-              id="username"
-              class="form-control"
-              required
-            />
+            {{ form.username.label(class="form-label") }} {{
+            form.username(class="form-control") }} {% if form.username.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form.username.errors %}
+              <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
           </div>
+
           <div class="mb-3">
-            <label for="password" class="form-label">Senha</label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              class="form-control"
-              required
-            />
+            {{ form.password.label(class="form-label") }} {{
+            form.password(class="form-control") }}
           </div>
-          <button type="submit" class="btn btn-primary w-100">Registrar</button>
+
+          <div class="mb-3">
+            {{ form.confirm_password.label(class="form-label") }} {{
+            form.confirm_password(class="form-control") }} {% if
+            form.confirm_password.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form.confirm_password.errors %}
+              <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+
+          {{ form.submit(class="btn btn-primary w-100") }}
         </form>
       </div>
       <div class="card-footer text-center">
