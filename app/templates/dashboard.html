@@ -76,6 +76,7 @@
     </div>
 
     <h3 class="mb-3">Histórico de Análises</h3>
+
     {% if pagination.items %} {% for feedback in pagination.items %}
     <div class="card border-secondary mb-3">
       <div class="card-body">
@@ -200,13 +201,14 @@
       }
 
       if (data.length === 0) {
-        ctx.font = "16px Arial";
+        const canvas = sentimentChartCanvas;
+        ctx.font = "16px sans-serif";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
         ctx.textAlign = "center";
-        ctx.fillStyle = "grey";
         ctx.fillText(
           "Nenhum dado para exibir no gráfico.",
-          sentimentChartCanvas.width / 2,
-          sentimentChartCanvas.height / 2
+          canvas.width / 2,
+          canvas.height / 2
         );
         return;
       }

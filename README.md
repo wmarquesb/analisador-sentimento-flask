@@ -1,6 +1,6 @@
 # Analisador de Sentimento com IA
 
-![Captura de tela do Dashboard](https://i.imgur.com/MEnOMQx.png)
+![Captura de tela do Dashboard](https://i.imgur.com/plRozAf.png)
 
 ### Sobre o Projeto
 

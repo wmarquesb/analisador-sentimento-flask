@@ -9,41 +9,30 @@ from app.ai_service import analyze_sentiment
 auth = Blueprint('auth', __name__)
 
 @auth.route("/")
+def index():
+    """Redireciona o usuário para o login ou para o dashboard."""
+    if current_user.is_authenticated:
+        return redirect(url_for('auth.dashboard'))
+    return redirect(url_for('auth.login'))
+
 @auth.route("/dashboard")
 @login_required
 def dashboard():
-    """Exibe o dashboard principal com formulário e histórico."""
     page = request.args.get('page', 1, type=int)
-    
-    pagination = Feedback.query.filter_by(
-        author=current_user
-    ).order_by(
-        Feedback.submission_date.desc()
-    ).paginate(
-        page=page, per_page=5
-    )
-    
+    pagination = Feedback.query.filter_by(author=current_user).order_by(Feedback.submission_date.desc()).paginate(page=page, per_page=5)
     return render_template('dashboard.html', pagination=pagination)
 
 @auth.route("/analyze", methods=['POST'])
 @login_required
 def analyze():
-    """Recebe o texto do formulário, analisa e salva no banco."""
     feedback_text = request.form.get('feedback_text')
     if feedback_text:
         sentiment = analyze_sentiment(feedback_text)
-        
-        new_feedback = Feedback(
-            text_content=feedback_text,
-            author=current_user,
-            sentiment_result=sentiment
-        )
+        new_feedback = Feedback(text_content=feedback_text, author=current_user, sentiment_result=sentiment)
         db.session.add(new_feedback)
         db.session.commit()
         flash('Seu feedback foi analisado com sucesso!', 'success')
     return redirect(url_for('auth.dashboard'))
-
-# --- ROTAS DE AUTENTICAÇÃO ---
 
 @auth.route("/register", methods=['GET', 'POST'])
 def register():
@@ -77,8 +66,6 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('auth.login'))
-
-# --- ROTAS DE AÇÕES DE FEEDBACK ---
 
 @auth.route("/reanalyze/<int:feedback_id>")
 @login_required
